@@ -1,0 +1,25 @@
+server:
+  port: 9030
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: product-service
+          uri: lb://product-service
+          predicates:
+            - Path=/product/**
+        - id: order-service
+          uri: lb://order-service
+          predicates:
+            - Path=/order/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:9000/eureka/
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
